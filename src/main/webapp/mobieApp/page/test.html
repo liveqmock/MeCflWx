@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="TestApp">
+<head>
+    <title>test.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../js/bower_components/bootstrap/dist/css/bootstrap.min.css"
+          type="text/css"></link>
+    <link rel="stylesheet"
+          href="../js/bower_components/bootstrap/dist/css/bootstrap-theme.min.css"
+          type="text/css"></link>
+
+    <script src="../js/bower_components/angular/angular.min.js"></script>
+    <script>
+
+
+        var testApp = angular.module("TestApp", []);
+        testApp.controller("testCtl", ['$scope', function ($scope) {
+            $scope.name = 1;
+            setInterval(function () {
+                $scope.$apply(function(){
+                    $scope.name++;
+                })
+            }, 1000);
+        }])
+    </script>
+<body>
+<div ng-controller="testCtl">
+    {{name}}
+</div>
+
+</body>
+</html>

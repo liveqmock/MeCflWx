@@ -1,0 +1,31 @@
+{
+  "name": "GwApp",
+  "version": "1.0",
+  "authors": [
+    "曹飞龙"
+  ],
+  "description": "官网项目",
+  "main": "GwApp",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "keywords": [
+    "新闻发布"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "angularjs": "~1.3.10",
+    "requirejs": "~2.1.15",
+    "angular-ui-router": "~0.2.13",
+    "bootstrap": "~3.3.2"
+  }
+}
+
+
+

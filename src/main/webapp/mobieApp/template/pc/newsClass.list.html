@@ -1,0 +1,20 @@
+<div>
+    <table class="table table-hover">
+        <thead>
+        <th>index</th>
+        <th>id</th>
+        <th>类别名称</th>
+        <th>操作</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="newsClass in newsClassList">
+            <td>{{$index}}</td>
+            <td>{{ newsClass.id}}</td>
+            <td>{{ newsClass.className}}</td>
+            <td><a ui-sref="center.newsClass.list.detail({'id':{{ newsClass.id}}})">详情</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <div  ui-view>
+    </div>
+</div>
