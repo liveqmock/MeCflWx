@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html ng-app="yiNg">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .treeMain {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .treeMain li {
+            margin-left: 10px;
+            list-style: none;
+            cursor: pointer;
+            user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+        }
+
+        .treeMain span:hover {
+            background-color: #4dff9d;
+        }
+    </style>
+    <script src="../js/bower_components/angularjs/angular.min.js"></script>
+    <script>
+        angular.module("yiNg", []).controller("testCtls", ["$scope", function ($scope) {
+            $scope.treeDatas = [{
+                "text": "node1",
+                "id": "1",
+                "childrens": [
+                    {"text": "node11", "id": "111"},
+                    {"text": "node12", "id": "112"}
+                ]
+            }, {
+                "text": "node2",
+                "id": "2",
+                "childrens": [
+                    {"text": "node21", "id": "111"},
+                    {
+                        "text": "node22", "id": "112", "childrens": [
+                        {"text": "node21", "id": "1121"},
+                        {
+                            "text": "node22", "id": "1122", "childrens": [
+                            {"text": "node221", "id": "11221"},
+                            {"text": "node232", "id": "11222"}
+                        ]
+                        }
+                    ]
+                    }
+                ]
+            }]
+        }]).directive("treeTemplate", function () {
+            return {
+                scope: {
+                    treedata: "="
+                },
+                restrict: "AE",
+                replace: false,
+                transclude: true,
+                template: "<ul class='treeMain'><li  ng-repeat='data in treedata' ><span ng-click='openOrCloseNode(data)' ng-mousemove='treeMove($event)' u  ng-mousedown='treeMoveStart(data)' ng-mouseup='treeMoveEnd(data)'>{{data.text}}</span><button ng-click='removeNode(data)'>删除</button><tree ng-show='data.Close' ng-if='data.childrens' treedataref='data.childrens' ></tree></li></ul>",
+                link: function (scope, element, attr) {
+                    //打开和关闭节点的方法
+                    scope.openOrCloseNode = function (data) {
+                        data.Close = !data.Close;
+                    }
+                    //移除方法
+                    scope.removeNode = function (removeNode) {
+                        var currentData = scope.treedata;
+                        for (var i = 0; i < currentData.length; i++) {
+                            if (currentData[i] == removeNode) {
+                                currentData.splice(i, 1);
+                            }
+                        }
+                    }
+                    //拖拽开始方法
+                    scope.treeMoveStart = function (data) {
+                        //把需要移动的数据存入全局变量
+                        moveData = data;
+                        moveList = scope.treedata;
+                    }
+                    //拖拽方法
+                    scope.treeMove = function ($event) {
+                        // console.info($event.pageX+"   "+ $event.pageY);
+                        // console.info($event.target);
+                    }
+                    ///拖拽结束方法
+                    scope.treeMoveEnd = function (data) {
+                        if (data != moveData) {//如果结束的地方是有节点的就添加到结点的子模块
+                            for (var i = 0; i < moveList.length; i++) {
+                                if (moveList[i] == moveData) {
+                                    moveList.splice(i, 1);
+                                }
+                            }
+                            if (data.childrens && data.childrens.length > 0) {
+                                data.childrens.push(moveData);
+                            } else {
+                                data.childrens = [moveData];
+                            }
+                            moveData = {};
+                        }
+                    }
+                }
+            }
+        }).directive("tree", function ($compile) {
+            return {
+                scope: {
+                    treedataref: "="
+                },
+                restrict: "AE",
+                replace: false,
+                transclude: true,
+                link: function (scope, element, attr) {
+                    var appendEle = document.createElement("tree-template");
+                    appendEle.setAttribute('treedata', "treedataref");
+                    element.append(appendEle);//追加结点
+                    $compile(appendEle)(scope);//重新编译结点
+                }
+            }
+        }).constant('moveData', {}).constant('moveList', []);
+    </script>
+</head>
+<body>
+<div ng-controller="testCtls">
+    <tree-template treedata="treeDatas">
+    </tree-template>
+    <div>{{treeDatas| json}}</div>
+</div>
+</body>
+</html>
